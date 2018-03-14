@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Generate Documentation",
+        "command": "doco:generateDoc"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "doco",
+          "submenu": [
+            {
+              "label": "Generate Documentation",
+              "command": "doco:generateDoc"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
