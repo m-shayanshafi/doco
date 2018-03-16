@@ -2,12 +2,21 @@
 
 import DocoView from './doco-view';
 import { CompositeDisposable } from 'atom';
+import {exec} from 'child_process';
 
 export default {
 
   docoView: null,
   modalPanel: null,
   subscriptions: null,
+
+  config: {
+    somePath: {
+      description: "Enter the path for whatever Renato wants"
+      type: 'string'
+      default: atom.packages.getPackageDirPaths()[0] + '/doco'
+    }
+  },
 
   activate(state) {
     this.docoView = new DocoView(state.docoViewState);
@@ -39,6 +48,10 @@ export default {
 
   generateDoc() {
     console.log('Doco was toggled!');
+    console.log(atom.packages.getPackageDirPaths())
+
+    commandtoRun = 'ls'
+    packageDirectory = atom.packages.getPackageDirPaths()[0] + '/doco'
 
     // Selecting a function and generating documentation for it
     if (editor = atom.workspace.getActiveTextEditor()) {
@@ -50,16 +63,47 @@ export default {
         let funcText = selections[i].getText()
         selections[i].clear()
         // pass function to some value
-        editor.insertText("\n/*Precondition: Insert precondition here*/\n")
-        editor.insertText("/* Postcondition: Insert precondition here*/\n")
-        editor.insertText("/* Usage: Insert usage here*/\n\n")
-        
+        runCommand('cd '+ packageDirectory).then(console.log("Directory changed"))
+        runCommand(commandtoRun).then(function({stdout}){
+          console.log(stdout)
+        })
+
+
       }
+    }
+  }
+
+
+};
+
+async function runCommand(cmd) {
+  var std = await new Promise(function (resolve, reject) {
+    exec(cmd, {cwd: atom.packages.getPackageDirPaths()[0] + '/doco'},(err, stdout, stderr) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ stdout, stderr });
+      }
+    });
+  });
+  return std
+}
+
+
+
+
+
+
+
+
+
+
+
 
       //configuration for the plugin
       //insert error checking
 
-    }
+
 
       // Taking the whole file and selecting functions from it
       //
@@ -101,10 +145,3 @@ export default {
       //   //   console.log(atom.grammars)
       //   // }
       // }
-
-
-
-
-  }
-
-};
