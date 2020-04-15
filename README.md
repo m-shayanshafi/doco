@@ -19,14 +19,4 @@ Make sure the correct permissions are set for the atom folder.
 
 ```
 sudo chown -R `whoami` ~/.atom``
-
-
-```
-git clone https://github.com/javapathfinder/jpf-core
-```
-
-Build jpf-core :	
-
-```
-./gradlew buildJars
 ```
